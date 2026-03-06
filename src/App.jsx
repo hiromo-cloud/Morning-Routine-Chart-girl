@@ -26,6 +26,48 @@ const db = getFirestore(app);
 const APP_STORAGE_KEY = 'morning-routine-app-v1';
 
 const App = () => {
+  // タスクの追加
+const addTask = async () => {
+  const newTask = {
+    id: Date.now(),
+    label: '新しいおしたく',
+    duration: 5,
+    icon: 'sparkle',
+    completed: false
+  };
+  const updated = [...tasks, newTask];
+  setTasks(updated);
+  await saveData({ tasks: updated });
+};
+
+// タスクの削除
+const deleteTask = async (id) => {
+  const updated = tasks.filter(t => t.id !== id);
+  setTasks(updated);
+  // 実行中のタスクを消した場合はタイマーをリセット
+  if (activeTaskId === id) {
+    setActiveTaskId(null);
+    setTaskSecondsLeft(0);
+  }
+  await saveData({ tasks: updated });
+};
+
+// タスク内容の更新（名前、アイコン、時間）
+const updateTaskDetail = async (id, field, value) => {
+  const updated = tasks.map(t => {
+    if (t.id === id) {
+      let val = value;
+      if (field === 'duration') {
+        val = value === "" ? 0 : parseInt(value, 10);
+        val = isNaN(val) ? 0 : Math.min(60, Math.max(0, val));
+      }
+      return { ...t, [field]: val };
+    }
+    return t;
+  });
+  setTasks(updated);
+  await saveData({ tasks: updated });
+};
   const DAYS_OF_WEEK = ['月', '火', '水', '木', '金', '土', '日'];
   
   // --- States ---
