@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* モバイルでのバウンススクロールやタップハイライトを制御 */
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-pink-50 text-gray-800 antialiased;
+    font-family: 'Zen Maru Gothic', sans-serif;
+  }
+}
+
+@layer components {
+  /* Canvas版の「星」や「うさぎ」のふわふわした動きを再現 */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* スクロールバーのカスタマイズ（おとなの設定画面用） */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-pink-50;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-pink-200 rounded-full;
+}
